@@ -1,0 +1,8 @@
+
+
+ALTER USER myuser WITH SUPERUSER;
+
+ln -sfv /usr/local/opt/postgresql/*.plist ~/Library/LaunchAgents
+
+createdb -U admin nest
+  actually created database

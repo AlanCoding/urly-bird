@@ -69,3 +69,4 @@ docs/_build/
 target/
 
 .direnv/
+.DS_Store
