@@ -8,6 +8,7 @@ class BookmarkForm(forms.ModelForm):
     class Meta:
         model = Bookmark
         fields = ('URL', 'title', 'description',)
+#        blank = True
 
 class BookmarkerForm(forms.ModelForm):
 

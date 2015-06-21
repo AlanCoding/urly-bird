@@ -25,7 +25,7 @@ SECRET_KEY = 'aj))w*bghe_dae&_$#b@atrzuf(-#-cd15z!^umc=52n9cwg7y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -116,3 +116,25 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, "project_static")
+
+
+BOOTSTRAP3 = {
+
+    # The URL to the jQuery JavaScript file
+    'jquery_url': '/static/jquery-2.1.4.min.js',
+
+    # The Bootstrap base URL
+    'base_url': '/static/bootstrap/',
+
+    # The complete URL to the Bootstrap CSS file (None means no theme)
+#    'theme_url': '/static/bootstrap/css/sandstone.css',
+    'theme_url': '/static/bootstrap/css/bootstrap-theme.min.css',
+
+    # Include jQuery with Bootstrap JavaScript (affects django-bootstrap3 template tags)
+    'include_jquery': True,
+#    'set_required':False,
+}
+
+ADMINS = (
+    ('Alan Rominger', 'alan.rominger@gmail.com')
+)

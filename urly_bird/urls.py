@@ -16,13 +16,21 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import RedirectView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
 
 from urlmodel import views as site_views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^index.html$', site_views.IndexView.as_view(), name='index'),
+    url(r'^login/$',  'django.contrib.auth.views.login',  name='view_login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='view_logout'),
+    url(r'^register/$', CreateView.as_view(
+                template_name='registration/register.html',
+                form_class=UserCreationForm,success_url='/'), name='view_register'),
+    # my pages
+    url(r'^(index.html)?$', site_views.IndexView.as_view(), name='view_index'),
     url(r'^(?P<code>\w+)$', site_views.ClickView.as_view(), name='click'),
     url(r'^u/(?P<user_id>\d+)$', site_views.BookmarkerView.as_view(), name='bookmarker'),
     url(r'^b/(?P<code>\w+)$', site_views.BookmarkView.as_view(), name='bookmark'),

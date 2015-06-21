@@ -10,20 +10,21 @@
   {% bootstrap_javascript %}
   <link rel="stylesheet" href="{% static 'style.css' %}"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MovieLens rating site</title>
+    <title>URLy bird</title>
 </head>
 <body>
 
 <div class="container">
   <div class="header clearfix">
     <nav>
-      <ul class="nav nav-pills">
-        <li role="presentation">Placeholder</li>
-        <li class="dropdown">
+      <ul class="nav nav-pills pull-left">
+        <li><h3 class="text-muted">URLy Bird</h3></li>
+        <li role="presentation" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alan's Work<span class="caret"></span></a>
           <ul class="dropdown-menu">
 
             <li><a href="http://alancoding.github.io/">Alan's Page</a></li>
+            <li><a href="https://nameless-mountain-9760.herokuapp.com/index.html">MovieLens Project</a></li>
 
             <li role="separator" class="divider"></li>
             <li class="dropdown-header">More to play with</li>
@@ -33,6 +34,7 @@
         </li>
       </ul>
       <ul class="nav nav-pills pull-right">
+          <li role="presentation" class="active"><a href="{% url 'view_index'}">Index</a></li>
         {% if request.user.is_authenticated %}
           <li role="presentation"><a href="{% url 'view_user' request.user.id %}">User: {{ request.user.username }}</a></li>
           <li role="presentation"><a href="{% url 'view_dashboard' %}">Dashboard</a></li>
@@ -43,13 +45,14 @@
         {% endif %}
       </ul>
     </nav>
-    <h3 class="text-muted">URLy Bird</h3>
+<!--    <h3 class="text-muted">URLy Bird</h3> -->
   </div>
 
   <div class="jumbotron">
-    <h1>URLy Bird - URL shortener</h1>
-    <p class="lead">Get your worm today, before some one else does.
-                    The internet needs you. Sign up today. Don't delay.</p>
+    <h2>URL Shortener</h2>
+    <p class="lead">Enter your URL into the box below and hit enter.
+        You will recieve a shorter URL that directs you to the site.
+        Get the worm before some else does. Don't be late. Be URLy.</p>
     <p><a class="btn btn-lg btn-success" href="{% url 'view_register' %}">Sign up</a></p>
   </div>
 
@@ -59,10 +62,12 @@
     {% endblock %}
   </div>
 
-</div>
 
 <footer class="footer">
   <p>&copy; Just kidding, no copyrights, 2015</p>
 </footer>
+
+</div> <!-- container div -->
+
 </body>
 </html>

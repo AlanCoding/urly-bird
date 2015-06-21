@@ -8,8 +8,8 @@ import pytz
 
 # managers
 class BookmarkManager(models.Manager):
-    def create_bookmark(self, url):
-        bookmark = Bookmark(url=url)
+    def create_bookmark(self, url, time_of_now):
+        bookmark = Bookmark(URL=url, posted_at=time_of_now)
         while True:
             bookmark.generate_code()
             if not self.code_duplicate(bookmark.code):
@@ -37,10 +37,10 @@ class Bookmark(models.Model):
     URL = models.CharField(max_length=300)
     code = models.CharField(max_length=10, unique=True)
     posted_at = models.DateTimeField()
-    title = models.CharField(max_length=255, null=True)
-    description = models.CharField(max_length=255, null=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    description = models.CharField(max_length=255, null=True, blank=True)
 
-    tag = models.ForeignKey(Tag)
+    tag = models.ManyToManyField(Tag, blank=True)
 
     objects = BookmarkManager()
 

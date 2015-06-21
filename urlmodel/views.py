@@ -6,7 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.generic import View, RedirectView, ListView, \
                             DetailView, DeleteView, UpdateView
+from django.conf import settings
 
+from django.utils import timezone
+import pytz
 
 class BookmarkerView(ListView):
     template_name = 'urlmodel/bookmarker.html'
@@ -31,12 +34,23 @@ class BookmarkerView(ListView):
 class IndexView(View):
     template_name = 'index.html'
 
-    def get(self, request):
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['bookmark_form'] = BookmarkForm()
+        return context
+
+    def get(self, request, *args, **kwargs):
         bookmark_form = BookmarkForm()
         return render(request, "index.html", {'bookmark_form':bookmark_form})
 
-    def post(self, request):
-        bmk = Bookmark.create_bookmark()
+    def post(self, request, *args, **kwargs):
+#        tzname = request.session.get('django_timezone')
+#        print(tzname)
+
+        timezone.activate(settings.TIME_ZONE)
+        now_t = timezone.now()
+        timezone.deactivate()
+        bmk = Bookmark.objects.create_bookmark(request.POST.get('URL'), now_t)
         messages.add_message(request, messages.SUCCESS,
                             "Your bookmark has been added!!1")
         return render(request, "index.html")
