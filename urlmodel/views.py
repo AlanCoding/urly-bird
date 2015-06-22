@@ -41,19 +41,23 @@ class IndexView(View):
 
     def get(self, request, *args, **kwargs):
         bookmark_form = BookmarkForm()
-        return render(request, "index.html", {'bookmark_form':bookmark_form})
+        return render(request, self.template_name, {'bookmark_form':bookmark_form})
 
     def post(self, request, *args, **kwargs):
-#        tzname = request.session.get('django_timezone')
-#        print(tzname)
-
         timezone.activate(settings.TIME_ZONE)
         now_t = timezone.now()
         timezone.deactivate()
-        bmk = Bookmark.objects.create_bookmark(request.POST.get('URL'), now_t)
+
+        bmk = Bookmark(URL=request.POST.get('URL'), posted_at=now_t,
+                        title=request.POST.get('title'),
+                        description=request.POST.get('description'))
+        bmk.code = Bookmark.objects.allocate_code()
+        bmk.save()
+
         messages.add_message(request, messages.SUCCESS,
                             "Your bookmark has been added!!1")
-        return render(request, "index.html")
+        bookmark_form = BookmarkForm()
+        return render(request, self.template_name, {'bookmark_form':bookmark_form})
 
 
 class ClickView(RedirectView):
@@ -63,15 +67,15 @@ class ClickView(RedirectView):
     url = 'http://www.google.com' # if approach fails
 
     def get_redirect_url(self, *args, **kwargs):
-        bookmark = Bookmark.objects.get(pk=kwargs['code'])
-        user = request.user
-        if user is not None:
-            click = Click(bookmark=bookmark, user=user)
-        else:
-            click = Click(bookmark=bookmark)
+        bookmark = Bookmark.objects.get(code=kwargs['code'])
+#        user = request.user
+#        if user is not None:
+#            click = Click(bookmark=bookmark, user=user)
+#        else:
+        click = Click(bookmark=bookmark)
         click.set_time()
         click.save()
-        self.url = bookmark.url
+        self.url = bookmark.URL
         return super(ClickView, self).get_redirect_url(*args, **kwargs)
 
 

@@ -5,17 +5,23 @@ import datetime
 
 from django.utils import timezone
 import pytz
+from django.conf import settings
+
+
+# static functions
+def generate_code():
+    from random import choice
+    from string import ascii_lowercase
+    return "".join(choice(ascii_lowercase) for _ in range(4))
 
 # managers
 class BookmarkManager(models.Manager):
-    def create_bookmark(self, url, time_of_now):
-        bookmark = Bookmark(URL=url, posted_at=time_of_now)
+    def allocate_code(self):
         while True:
-            bookmark.generate_code()
-            if not self.code_duplicate(bookmark.code):
+            try_code = generate_code()
+            if not self.code_duplicate(try_code):
                 break
-        bookmark.save()
-        return bookmark
+        return try_code
 
     def code_duplicate(self, code):
         ret = False
@@ -37,8 +43,8 @@ class Bookmark(models.Model):
     URL = models.CharField(max_length=300)
     code = models.CharField(max_length=10, unique=True)
     posted_at = models.DateTimeField()
-    title = models.CharField(max_length=255, null=True, blank=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
+    title = models.CharField(max_length=255, blank=True)
+    description = models.CharField(max_length=255, blank=True)
 
     tag = models.ManyToManyField(Tag, blank=True)
 
@@ -51,13 +57,8 @@ class Bookmark(models.Model):
         ret_st += self.URL
         return ret_st
 
-    def generate_code(self):
-        from random import choice
-        from string import ascii_lowercase
-        self.code = "".join(choice(ascii_lowercase) for _ in range(4))
-
     def total_clicks(self):
-        return len(self.tag_set.all())
+        return len(self.click_set.all())
 
 
 class Bookmarker(models.Model):
@@ -76,7 +77,7 @@ class Click(models.Model):
     clicked_at = models.DateTimeField(null=True)
 
     def set_time(self):
-        tzname = request.session.get('django_timezone')
-        timezone.activate(pytz.timezone(tzname))
+        timezone.activate(settings.TIME_ZONE)
+        now_t = timezone.now()
         self.clicked_at = timezone.now()
         timezone.deactivate()

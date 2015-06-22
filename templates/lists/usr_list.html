@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+{% bootstrap_pagination page_obj %}
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>URL</th>
+			<th>Date</th>
+			<th>Title</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for bmkr in bookmarkers %}
+		<tr>
+			<td><a href="{% url 'click' bmk.code %}">
+				{{ bmkr.URL }}</a></td>
+			<td>{{ bmkr.posted_at }}</td>
+			<td>{{ bmkr.title }}</td>
+			<td>{{ bmkr.description }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% bootstrap_pagination page_obj %}
+
+{% endblock %}

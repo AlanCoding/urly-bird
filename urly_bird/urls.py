@@ -20,6 +20,7 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
 from urlmodel import views as site_views
+from urlmodel.models import Bookmark, Bookmarker
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -34,4 +35,17 @@ urlpatterns = [
     url(r'^(?P<code>\w+)$', site_views.ClickView.as_view(), name='click'),
     url(r'^u/(?P<user_id>\d+)$', site_views.BookmarkerView.as_view(), name='bookmarker'),
     url(r'^b/(?P<code>\w+)$', site_views.BookmarkView.as_view(), name='bookmark'),
+    url(r'^bmk_list.html$', site_views.ListView.as_view(
+                    model=Bookmark,
+                    template_name="lists/bmk_list.html",
+                    context_object_name='bookmarks',
+                    paginate_by=10
+                    ), name='bmk_list'),
+
+    url(r'^usr_list.html$', site_views.ListView.as_view(
+                    model=Bookmarker,
+                    template_name="lists/usr_list.html",
+                    context_object_name='bookmarkers',
+                    paginate_by=10
+                    ), name='usr_list'),
 ]
