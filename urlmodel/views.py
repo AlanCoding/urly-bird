@@ -41,10 +41,10 @@ class BookmarkerView(views.ListView):
             self.bookmarker = Bookmarker.objects.get(pk=self.kwargs['bookmarker_id'])
         else:
             self.bookmarker = self.request.user.bookmarker
-        return super(GenreView, self).dispatch(*args, **kwargs)
+        return super(BookmarkerView, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return self.bookmarker.bookmark_set.order_by('-posted_at')
+        return self.bookmarker.user.bookmark_set.order_by('-posted_at')
 
     def get_context_data(self, **kwargs):
         context = super(BookmarkerView, self).get_context_data(**kwargs)
@@ -57,6 +57,7 @@ class IndexPageView(views.CreateView):
     model = Bookmark
     # fields = ['URL', 'title', 'description']
     form_class = BookmarkForm
+    success_url = 'index.html'
 
     # def get_context_data(self, **kwargs):
     #     context = super(IndexPageView, self).get_context_data(**kwargs)
@@ -78,12 +79,17 @@ class IndexPageView(views.CreateView):
         #                 description=request.POST.get('description'))
         form.instance.posted_at = now_t
         form.instance.code = Bookmark.objects.allocate_code()
-        bmk = Bookmarker()
-        bmk.save()
-        form.instance.bookmarker = bmk
-        # bmk.save()
+        user = self.request.user
 
-        messages.add_message(request, messages.SUCCESS,
+        if user is not None and user.is_authenticated():
+            form.instance.user = user
+        else:
+            form.instance.user = User.objects.get(pk=1)
+#        bmk = Bookmarker()
+#        bmk.save()
+#        form.instance.bookmarker = bmk
+        # bmk.save()
+        messages.add_message(self.request, messages.SUCCESS,
                             "Your bookmark has been added!!1")
         #bookmark_form = BookmarkForm()
         # return render(request, self.template_name, {'bookmark_form':bookmark_form})
@@ -121,6 +127,33 @@ class MyRegisterView(views.CreateView):
         return context
 
     def form_valid(self, form):
+#        bmkr.save()
+#        form.instance.bookmarker = bmkr
+        # self.object = form.save(commit=False)
+        # self.object.save()
+
+        usr = form.save()
+        bmkr = Bookmarker()
+        bmkr.user = usr
+        bmkr.save()
+
+        password = usr.password
+        usr.set_password(password)
+        usr.save()
+
+
+        usr = authenticate(username=usr.username,
+                            password=password)
+        login(self.request, usr)
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            "Congratulations, {}, on creating your new account! You are now logged in.".format(
+                usr.username))
+
+        # bmkr = Bookmarker()
+        # bmkr.user = self.object
+        # bmkr.save()
 
         return redirect('view_index')
 

@@ -6,6 +6,7 @@
 <form method="POST" action="{% url 'view_register' %}">
 	{% csrf_token %}
 	{% bootstrap_form form %}
+	{% bootstrap_form bookmarker_form %}
 	<input type="submit" name="submit" value="Create Account!"/>
 </form>
 

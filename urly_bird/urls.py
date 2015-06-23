@@ -37,10 +37,11 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^login/$',  'django.contrib.auth.views.login',  name='view_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='view_logout'),
-    url(r'^register/$', CreateView.as_view(
-                template_name='registration/register.html',
-                form_class=UserCreationForm, success_url='../index.html'),
-                name='view_register'),
+    url(r'^register/$', v.MyRegisterView.as_view(), name='view_register'),
+    # url(r'^register/$', CreateView.as_view(
+    #             template_name='registration/register.html',
+    #             form_class=UserCreationForm, success_url='../index.html'),
+    #             name='view_register'),
     url(r'^accounts/profile', v.BookmarkerView.as_view(), name='dashboard'),
     # url(r'^register/$', v.RegisterView.as_view(), name='view_register'),
     # my pages
