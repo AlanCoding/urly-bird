@@ -1,4 +1,5 @@
 from urlmodel.models import *
+from django.contrib.auth.models import User
 
 def missing_bookmarkers():
 	print("filling in missing bookmarkers...")
@@ -17,7 +18,7 @@ def demo_solution():
 		print(model_field_exists(user, 'bookmarker'))
 	print(' id checking')
 	for user in User.objects.all():
-		print(model_field_exists(user, 'bookmarke.id'))
+		print(model_field_exists(user, 'bookmarker.id'))
 	print(' checking asdf')
 
 	for user in User.objects.all():

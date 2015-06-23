@@ -45,6 +45,8 @@ class Bookmark(models.Model):
     posted_at = models.DateTimeField()
     title = models.CharField(max_length=255, blank=True)
     description = models.CharField(max_length=255, blank=True)
+    user = models.ForeignKey(User)
+#    user = models.ForeignKey(User, null=True)
 
     tag = models.ManyToManyField(Tag, blank=True)
 
