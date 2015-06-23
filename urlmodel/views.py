@@ -15,6 +15,16 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import pytz
 
+# for viewset stuff
+from rest_framework import viewsets
+import .serializer as s
+
+# Create your views here.
+class BookmarkViewSet(viewsets.ModelViewSet):
+    queryset = Bookmark.objects.all()
+    serializer_class = s.BookmarkSerializer
+
+
 class BookmarkerView(views.ListView):
     template_name = 'urlmodel/bookmarker.html'
 #    model = Bookmark

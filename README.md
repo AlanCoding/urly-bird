@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 # URLy Bird
 
 ## Description
 
 Create a URL shortener/bookmarking site with Django.
+=======
+# URLy Bird API
+
+## Description
+
+Add a REST-based API to [URLy Bird](https://github.com/tiyd-python-2015-05/urly-bird).
+>>>>>>> d8bd4943cabe5be5d78554a315a43751f24277ca
 
 ## Objectives
 
@@ -10,6 +18,7 @@ Create a URL shortener/bookmarking site with Django.
 
 After completing this assignment, you should be able to:
 
+<<<<<<< HEAD
 * Extrapolate from current Django projects to build a new project of substantial size and features
 * Determine which model field types to use to represent data
 * Translate English descriptions of data queries into Django ORM queries
@@ -18,11 +27,16 @@ After completing this assignment, you should be able to:
 * Select generic views from Django to speed development
 * Generate charts via Django views
 * Protect access and choose behavior based on user status
+=======
+* Design a simple REST API.
+* Implement authentication and authorization for an API in Django.
+>>>>>>> d8bd4943cabe5be5d78554a315a43751f24277ca
 
 ## Details
 
 ### Deliverables
 
+<<<<<<< HEAD
 * A Git repo called urly-bird containing at least:
   * `README.md` file explaining how to run your project
   * a `requirements.txt` file
@@ -79,11 +93,30 @@ Add a stats page for each link where you can see the traffic for that link for t
 
 Add an overall stats page for each user where you can see a table of their links by popularity and their number
 of clicks over the last 30 days. This page should only be visible to that user.
+=======
+Instead of forking this repo, use your previous URLy Bird project and push there.
+
+## Normal Mode
+
+Add an API under the URL `/api` to URLy Bird.
+
+This API should be read-only unless the user is authenticated. If authenticated,
+the user can add new bookmarks and edit and delete their own bookmarks.
+
+The API should allow for:
+
+* Viewing, editing, and deleting bookmarks
+* Seeing the click stats for a bookmark
+* Adding a click to a bookmark
+* Allowing a user to see their overall stats (This is a replication of the
+  overall stats page from the original assignment.)
+>>>>>>> d8bd4943cabe5be5d78554a315a43751f24277ca
 
 ## Hard Mode
 
 For hard mode, do everything shown above, plus any of the following features.
 
+<<<<<<< HEAD
 * Allow users to create topical lists of URLs, with each list having a title and
 optional description.
 * Allow resorting of URLs on topical list pages.
@@ -95,3 +128,9 @@ optional description.
 ## Additional Resources
 
 * [Hashids](http://hashids.org/python/). These may be useful for creating short URLs.
+=======
+* Allow new user creation through the API.
+* Allow token-based authentication.
+* Support topical lists or tags from the original assignment through the API.
+* Add functional tests for your API.
+>>>>>>> d8bd4943cabe5be5d78554a315a43751f24277ca
