@@ -17,12 +17,12 @@ import pytz
 
 # for viewset stuff
 from rest_framework import viewsets
-import .serializer as s
+from .serializer import *
 
 # Create your views here.
 class BookmarkViewSet(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
-    serializer_class = s.BookmarkSerializer
+    serializer_class = BookmarkSerializer
 
 
 class BookmarkerView(views.ListView):
