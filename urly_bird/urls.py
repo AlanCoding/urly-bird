@@ -28,6 +28,7 @@ from urlmodel import models as m
 
 router = routers.DefaultRouter()
 router.register(r'bmks', v.BookmarkViewSet)
+router.register(r'clk',  v.ClickViewSet)
 
 
 urlpatterns = [
