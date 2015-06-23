@@ -40,7 +40,7 @@ class Tag(models.Model):
 
 
 class Bookmark(models.Model):
-    URL = models.CharField(max_length=300)
+    URL = models.URLField(max_length=300)
     code = models.CharField(max_length=10, unique=True)
     posted_at = models.DateTimeField()
     title = models.CharField(max_length=255, blank=True)
@@ -62,7 +62,7 @@ class Bookmark(models.Model):
 
 
 class Bookmarker(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, null=True)
     age = models.IntegerField(null=True)
     gender_options = (('M', 'Male'), ('F', 'Female'))
     gender = models.CharField(max_length=1, choices=gender_options, default='M')

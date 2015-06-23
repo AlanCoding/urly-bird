@@ -56,8 +56,8 @@
       <ul class="nav nav-pills pull-right">
           <li role="presentation" class="active"><a href="{% url 'view_index' %}">Index</a></li>
         {% if request.user.is_authenticated %}
-          <li role="presentation"><a href="{% url 'view_user' request.user.id %}">User: {{ request.user.username }}</a></li>
-          <li role="presentation"><a href="{% url 'view_dashboard' %}">Dashboard</a></li>
+          <li role="presentation"><a href="{% url 'bookmarker' request.user.id %}">User: {{ request.user.username }}</a></li>
+          <li role="presentation"><a href="{% url 'dashboard' %}">Dashboard</a></li>
           <li role="presentation"><a href="{% url 'view_logout' %}">log out</a></li>
         {% else %}
           <li role="presentation"><a href="{% url 'view_login' %}">Log in</a></li>

@@ -15,3 +15,11 @@ class BookmarkerForm(forms.ModelForm):
     class Meta:
         model = Bookmarker
         fields = ('age', 'gender')
+
+
+# class RegisterForm(forms.UserCreationForm):
+#     email = forms.EmailField(label = "Email")
+#
+#     class Meta:
+#         model = User
+#         fields = ("username", "fullname", "email", )
