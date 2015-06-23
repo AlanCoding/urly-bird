@@ -5,9 +5,10 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
 #    user = serializers.ReadOnlyField(source='user.username')
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     click = serializers.HyperlinkedIdentityField(view_name='click-detail')
+    # ctz = 2
     class Meta:
         model = Bookmark
-        fields = ['URL', 'url', 'user', 'posted_at', 'title', 'description', 'click']
+        fields = ['URL', 'url', 'user', 'posted_at', 'title', 'description', 'click', 'total_clicks']
 
 
 class ClickSerializer(serializers.HyperlinkedModelSerializer):

@@ -28,6 +28,21 @@ class ClickViewSet(viewsets.ModelViewSet):
     queryset = Click.objects.all()
     serializer_class = ClickSerializer
 
+class UserBmkViewSet(viewsets.ModelViewSet):
+    serializer_class = BookmarkSerializer
+    queryset = Bookmark.objects.all()
+    def get_queryset(self, user_id):
+        pass
+
+
+class BmkClickViewSet(viewsets.ModelViewSet):
+    serializer_class = ClickSerializer
+    queryset = Click.objects.all()
+    def get_queryset(self, bmk_id):
+        pass
+
+
+
 
 class BookmarkerView(views.ListView):
     template_name = 'urlmodel/bookmarker.html'
