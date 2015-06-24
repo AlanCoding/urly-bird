@@ -23,3 +23,11 @@ def demo_solution():
 
 	for user in User.objects.all():
 		print(model_field_exists(user, 'asdf'))
+
+def faked_data():
+	import random
+	#import faker
+	from faker import Factory
+	fake = Factory.create()
+	alist = [fake.user_name() for i in range(10)]
+	print(alist)

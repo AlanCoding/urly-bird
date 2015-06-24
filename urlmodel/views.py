@@ -16,30 +16,108 @@ from django.utils import timezone
 import pytz
 
 # for viewset stuff
-from rest_framework import viewsets
-from .serializer import *
+from rest_framework import viewsets, permissions, generics, filters
+import urlmodel.serializer as ser
+import urlmodel.permissions as per
+from django.views.decorators.http import require_http_methods
+# import django_filters
+#
+# class BookmarkerFilter(django_filters.FilterSet):
+#     name = django_filters.CharFilter(name="username", lookup_type="icontains")
+#     # notes = django_filters.CharFilter(name="notes", lookup_type="icontains")
+#
+#     class Meta:
+#         model = User
+#         fields = ['username', ]
 
-# Create your views here.
+# view sets
+
+# @require_http_methods(["GET", "PUT", "DELETE", "POST"])
 class BookmarkViewSet(viewsets.ModelViewSet):
+    serializer_class = ser.BookmarkSerializer
+    # permission_classes = (permissions.IsAuthenticated,
+    #                       IsOwnerOrReadOnly)
+    # filter_backends = (filters.DjangoFilterBackend,)
+    # filter_class = BookmarkerFilter
     queryset = Bookmark.objects.all()
-    serializer_class = BookmarkSerializer
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
 class ClickViewSet(viewsets.ModelViewSet):
     queryset = Click.objects.all()
-    serializer_class = ClickSerializer
+    serializer_class = ser.ClickSerializer
 
-class UserBmkViewSet(viewsets.ModelViewSet):
-    serializer_class = BookmarkSerializer
-    queryset = Bookmark.objects.all()
-    def get_queryset(self, user_id):
-        pass
+class BookmarkerViewSet(viewsets.ModelViewSet):
+    queryset = Bookmarker.objects.all()
+    serializer_class = ser.BookmarkerSerializer
+
+# lower level in API
+
+class BookmarkerBookmarkList(generics.ListCreateAPIView):
+    # permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ser.BookmarkSerializer
+
+    def initial(self, request, *args, **kwargs):
+        self.bookmarker = Bookmarker.objects.get(pk=kwargs['bmkr_id'])
+        self.user = self.bookmarker.user
+        super().initial(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.user.bookmark_set
+
+    # def perform_create(self, serializer):
+    #     if self.request.user != self.contact.owner:
+    #         raise PermissionDenied
+    #     serializer.save(bookmarker=self.bookmarker)
+    #     serializer.save(user=self.user)
+
+class BookmarkClickList(generics.ListCreateAPIView):
+    serializer_class = ser.ClickSerializer
+
+    def initial(self, request, *args, **kwargs):
+        self.bookmark = Bookmark.objects.get(pk=kwargs['bmk_id'])
+        super().initial(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return self.bookmark.click_set
 
 
-class BmkClickViewSet(viewsets.ModelViewSet):
-    serializer_class = ClickSerializer
-    queryset = Click.objects.all()
-    def get_queryset(self, bmk_id):
-        pass
+
+# list sets # redundant with ViewSet
+# class ClickListView(generics.ListCreateAPIView):
+#     permission_classes = (permissions.IsAuthenticated, )
+#     serializer_class = ser.ClickSerializer
+#
+#     def initial(self, request, *args, **kwargs):
+#         self.user = User.objects.get(pk=kwargs['user_id'])
+#         super.initial(request, *args, **kwargs)
+#
+#     def get_queryset(self):
+#         return self.user.click_set
+#
+#
+# class BookmarkerListView(generics.ListCreateAPIView):
+#
+#
+# class ListView(generics.ListCreateAPIView):
+
+
+
+# class UserBmkViewSet(viewsets.ModelViewSet):
+#     permission_classes = (permissions.IsAuthenticated, )
+#     serializer_class = ser.BookmarkSerializer
+#     queryset = Bookmark.objects.all()
+#     def get_queryset(self, user_id):
+#         user = User.objects.get(pk=user_id)
+#         pass
+#
+#
+# class BmkClickViewSet(viewsets.ModelViewSet):
+#     serializer_class = ser.ClickSerializer
+#     queryset = Click.objects.all()
+#     def get_queryset(self, bmk_id):
+#         pass
 
 
 

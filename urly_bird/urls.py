@@ -29,23 +29,31 @@ from urlmodel import models as m
 router = routers.DefaultRouter()
 router.register(r'bmks', v.BookmarkViewSet)
 router.register(r'clk',  v.ClickViewSet)
-router.register(r'u(?P<user_id>\d+)', v.UserBmkViewSet)
-router.register(r'b(?P<bmk_id>\d+)', v.BmkClickViewSet)
+router.register(r'usr',  v.BookmarkerViewSet)
 
 
 urlpatterns = [
+    # Django management pages
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api/', include(router.urls)),
+    # API Pages
+    url(r'^api-auth/',
+        include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^', include(router.urls)),
+            # lower level views in API-land
+    # url(r'^usr/(?P<pk>\d+)', v.BookmarkerListView, name='bookmarker-list' )
+    url(r'^usr/(?P<bmkr_id>\d+)/bmks/', v.BookmarkerBookmarkList.as_view(), name="bookmarker-bookmark"),
+    # url(r'^usr/(?P<bmkr_id>\d+)/bmks/(?P<bmk_id>\d+)/', v.BookmarkerBookmarkClickList,
+    #                                             name="bookmarker-bookmark-click")
+    # url(r'^bmks/(?P<pk>\d+)/', v.BookmarkListView, name='bookmark-list')
+    url(r'^bmks/(?P<bmk_id>\d+)/clicks/', v.BookmarkClickList.as_view(), name="bookmark-click"),
+    # url(r'^clk/(?P<pk>\d+)', v.ClickListView, name='click-list' )
+
+    # App pages
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^login/$',  'django.contrib.auth.views.login',  name='view_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='view_logout'),
     url(r'^register/$', v.MyRegisterView.as_view(), name='view_register'),
-    # url(r'^register/$', CreateView.as_view(
-    #             template_name='registration/register.html',
-    #             form_class=UserCreationForm, success_url='../index.html'),
-    #             name='view_register'),
     url(r'^accounts/profile', v.BookmarkerView.as_view(), name='dashboard'),
-    # url(r'^register/$', v.RegisterView.as_view(), name='view_register'),
     # my pages
     url(r'^index.html$', v.IndexPageView.as_view(), name='view_index'),
     url(r'^(?P<code>\w+)$', v.ClickView.as_view(), name='click'),
