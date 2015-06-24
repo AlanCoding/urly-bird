@@ -3,11 +3,18 @@
 
 {% block content %}
 
+<div class="jumbotron">
+    <h2>Register Here!</h2>
+        <p class="lead">Use the form below to make an account.</p>
+</div>
+
+<div class="row marketing">
+
 <form method="POST" action="{% url 'view_register' %}">
 	{% csrf_token %}
 	{% bootstrap_form form %}
 	{% bootstrap_form bookmarker_form %}
 	<input type="submit" name="submit" value="Create Account!"/>
 </form>
-
+</div>
 {% endblock %}

@@ -52,8 +52,8 @@ class BookmarkerView(views.ListView):
     bookmarker = None
 
     def dispatch(self, *args, **kwargs):
-        if 'bookmarker_id' in self.kwargs:
-            self.bookmarker = Bookmarker.objects.get(pk=self.kwargs['bookmarker_id'])
+        if 'user_id' in self.kwargs:
+            self.bookmarker = Bookmarker.objects.get(pk=self.kwargs['user_id'])
         else:
             self.bookmarker = self.request.user.bookmarker
         return super(BookmarkerView, self).dispatch(*args, **kwargs)
@@ -148,6 +148,7 @@ class MyRegisterView(views.CreateView):
         # self.object.save()
 
         usr = form.save()
+        bookmarker_instance = BookmarkerForm(self.request.POST)
         bmkr = Bookmarker()
         bmkr.user = usr
         bmkr.save()
@@ -160,9 +161,7 @@ class MyRegisterView(views.CreateView):
         usr = authenticate(username=usr.username,
                             password=password)
         login(self.request, usr)
-        messages.add_message(
-            self.request,
-            messages.SUCCESS,
+        messages.add_message(self.request, messages.SUCCESS,
             "Congratulations, {}, on creating your new account! You are now logged in.".format(
                 usr.username))
 
@@ -174,12 +173,17 @@ class MyRegisterView(views.CreateView):
 
 
 
-class BookmarkView(views.DetailView):
+class BookmarkView(views.ListView):
     template_name = 'urlmodel/bookmark.html'
     model = Bookmark
-    context_object_name = 'bookmark'
+    context_object_name = 'clicks'
+    bmk = None
+
+    def get_queryset(self):
+        self.bmk = Bookmark.objects.get(code=self.kwargs['code'])
+        return self.bmk.click_set.all()
 
     def get_context_data(self, **kwargs):
         context = super(BookmarkView, self).get_context_data(**kwargs)
-        context['bookmark'] = Bookmark.objects.get(code=kwargs['code'])
+        context['bookmark'] = self.bmk
         return context

@@ -3,15 +3,20 @@
 
 {% block content %}
 
+<div class="jumbotron">
+    <h2>Bookmark List</h2>
+        <p class="lead">Bookmarks entered by users of the site</p>
+</div>
+
+<div class="row marketing">
+
 {% bootstrap_pagination page_obj %}
 
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>URL</th>
+			<th>URL/Title/Description</th>
 			<th>Date</th>
-			<th>Title</th>
-			<th>Description</th>
 			<th>Clicks</th>
 			<th>User</th>
 		</tr>
@@ -20,16 +25,20 @@
 		{% for bmk in bookmarks %}
 		<tr>
 			<td><a href="{% url 'click' bmk.code %}">
-				{{ bmk.URL }}</a></td>
+				{{ bmk.print_url }}</a> <br />
+				{{ bmk.title }} <br />
+				{{ bmk.description }}
+				</td>
 			<td>{{ bmk.posted_at }}</td>
-			<td>{{ bmk.title }}</td>
-			<td>{{ bmk.description }}</td>
-			<td>{{ bmk.total_clicks }}</td>
+			<td><a href="{% url 'bookmark' bmk.code %}">
+				{{ bmk.total_clicks }}</a></td>
 			<td>{{ bmk.user.username }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+</div>
+
 
 {% bootstrap_pagination page_obj %}
 

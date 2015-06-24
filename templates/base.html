@@ -68,21 +68,9 @@
 <!--    <h3 class="text-muted">URLy Bird</h3> -->
   </div>
 
-  <!-- <img src="static/birds.jpg" /> -->
-  <div class="jumbotron">
-    <h2>URL Shortener</h2>
-    <p class="lead">Enter your URL into the box below and hit enter.
-        You will recieve a shorter URL that directs you to the site.
-        Get the worm before some else does. Don't be late. Be URLy.</p>
-    <p><a class="btn btn-lg btn-success" href="{% url 'view_register' %}">Sign up</a></p>
-  </div>
-
-  <div class="row marketing">
-    {% bootstrap_messages %}
-    {% block content %}
-    {% endblock %}
-  </div>
-
+{% bootstrap_messages %}
+{% block content %}
+{% endblock %}
 
 <footer class="footer">
   <p>&copy; Just kidding, no copyrights, 2015</p>

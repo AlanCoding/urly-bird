@@ -3,6 +3,13 @@
 
 {% block content %}
 
+<div class="jumbotron">
+    <h2>User Dashboard</h2>
+        <p class="lead">Edit your bookmarks and perform other actions.</p>
+    <p><a class="btn btn-lg btn-success" href="{% url 'view_register' %}">Sign up</a></p>
+</div>
+
+<div class="row marketing">
 {% bootstrap_pagination page_obj %}
 
 <table class="table table-striped">
@@ -28,7 +35,7 @@
 		{% endfor %}
 	</tbody>
 </table>
-
+</div>
 {% bootstrap_pagination page_obj %}
 
 {% endblock %}

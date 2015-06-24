@@ -62,15 +62,30 @@ class Bookmark(models.Model):
     def total_clicks(self):
         return len(self.click_set.all())
 
+    def print_url(self):
+        if len(self.URL) > 50:
+            return self.URL[:47] + "..."
+        else:
+            return self.URL
+
 
 class Bookmarker(models.Model):
     user = models.OneToOneField(User, null=True)
-    age = models.IntegerField(null=True)
+    age = models.IntegerField(null=True, default=22)
     gender_options = (('M', 'Male'), ('F', 'Female'))
     gender = models.CharField(max_length=1, choices=gender_options, default='M')
 
     def __str__(self):
         return self.user.username
+
+    def total_bookmarks(self):
+        return len(self.user.bookmark_set.all())
+
+    def total_clicks(self):
+        ict = 0
+        for bmk in self.user.bookmark_set.all():
+            ict += bmk.total_clicks()
+        return ict
 
 
 class Click(models.Model):
