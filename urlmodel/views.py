@@ -44,6 +44,14 @@ class BookmarkViewSet(viewsets.ModelViewSet):
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user)
 
+    def get_paginate_by(self):
+        """
+        Use smaller pagination for HTML representations.
+        """
+        if self.request.accepted_renderer.format == 'html':
+            return 5
+        return 20
+
 class ClickViewSet(viewsets.ModelViewSet):
     queryset = Click.objects.all()
     serializer_class = ser.ClickSerializer
@@ -66,11 +74,19 @@ class BookmarkerBookmarkList(generics.ListCreateAPIView):
     def get_queryset(self):
         return self.user.bookmark_set
 
-    # def perform_create(self, serializer):
-    #     if self.request.user != self.contact.owner:
-    #         raise PermissionDenied
-    #     serializer.save(bookmarker=self.bookmarker)
-    #     serializer.save(user=self.user)
+    def perform_create(self, serializer):
+        usr = self.request.user
+        if usr != self.user:
+            raise PermissionDenied
+
+        timezone.activate(settings.TIME_ZONE)
+        now_t = timezone.now()
+        timezone.deactivate()
+
+        the_code = Bookmark.objects.allocate_code()
+
+        serializer.save(posted_at=now_t, user=self.user, code=the_code)
+
 
 class BookmarkClickList(generics.ListCreateAPIView):
     serializer_class = ser.ClickSerializer
@@ -81,6 +97,12 @@ class BookmarkClickList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return self.bookmark.click_set
+
+    def perform_create(self, serializer):
+        timezone.activate(settings.TIME_ZONE)
+        now_t = timezone.now()
+        timezone.deactivate()
+        serializer.save(bookmark=self.bookmark, user=self.request.user, clicked_at=now_t)
 
 
 
@@ -167,9 +189,6 @@ class IndexPageView(views.CreateView):
         now_t = timezone.now()
         timezone.deactivate()
 
-        # bmk = Bookmark(URL=request.POST.get('URL'), posted_at=now_t,
-        #                 title=request.POST.get('title'),
-        #                 description=request.POST.get('description'))
         form.instance.posted_at = now_t
         form.instance.code = Bookmark.objects.allocate_code()
         user = self.request.user

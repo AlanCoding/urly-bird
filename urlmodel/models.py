@@ -42,7 +42,7 @@ class Tag(models.Model):
 class Bookmark(models.Model):
     URL = models.URLField(max_length=300)
     code = models.CharField(max_length=10, unique=True)
-    posted_at = models.DateTimeField()
+    posted_at = models.DateTimeField(blank=True)
     title = models.CharField(max_length=255, blank=True)
     description = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(User)

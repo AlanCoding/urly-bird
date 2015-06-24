@@ -7,12 +7,10 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
 #    user = serializers.ReadOnlyField(source='user.username')
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     # user = serializers.HyperlinkedIdentityField(view_name='user-detail')
-
     # click = serializers.HyperlinkedIdentityField(view_name='click-detail')
     # user = serializers.HyperlinkedIdentityField(view_name='user-detail')
     # ctz = 2
     bookmarker = serializers.HyperlinkedIdentityField(view_name='bookmarker-detail')
-    posteddt = serializers.DateTimeField(source='posted_at')
     _links = SerializerMethodField()
 
     def get__links(self, obj):
@@ -20,11 +18,15 @@ class BookmarkSerializer(serializers.HyperlinkedModelSerializer):
             "clicks": reverse('bookmark-click', kwargs=dict(bmk_id=obj.pk),
                               request=self.context.get('request')), }
         return links
-        
+
     class Meta:
         model = Bookmark
-        fields = ['URL', 'url', 'user', 'bookmarker', 'posteddt', 'title',
+        fields = ['URL', 'url', 'user', 'bookmarker', 'posted_at', 'title',
                     'description', 'total_clicks', 'click_set', '_links']
+
+    # def get_validation_exclusions(self):
+    #     exclusions = super(BookmarkerSerializer, self).get_validation_exclusions()
+    #     return exclusions + ['posted_at']
 
     # def create(self):
 
@@ -50,7 +52,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class ClickSerializer(serializers.HyperlinkedModelSerializer):
 #    user = serializers.ReadOnlyField(source='user.username')
-    user = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     # user = serializers.HyperlinkedIdentityField(view_name='user-detail')
     bookmark = serializers.HyperlinkedIdentityField(view_name='bookmark-detail')
     class Meta:
