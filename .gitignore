@@ -68,8 +68,6 @@ docs/_build/
 # PyBuilder
 target/
 
-<<<<<<< HEAD
 .direnv/
 .DS_Store
-=======
->>>>>>> d8bd4943cabe5be5d78554a315a43751f24277ca
+*.pyc
