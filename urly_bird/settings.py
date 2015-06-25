@@ -87,6 +87,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
     },
 }
+print(' normal db')
 
 # DATABASES = {
 #     'default': {
