@@ -20,25 +20,26 @@ from rest_framework import viewsets, permissions, generics, filters
 import urlmodel.serializer as ser
 import urlmodel.permissions as per
 from django.views.decorators.http import require_http_methods
-# import django_filters
-#
-# class BookmarkerFilter(django_filters.FilterSet):
-#     name = django_filters.CharFilter(name="username", lookup_type="icontains")
-#     # notes = django_filters.CharFilter(name="notes", lookup_type="icontains")
-#
-#     class Meta:
-#         model = User
-#         fields = ['username', ]
+import django_filters
+
+
+class BookmarkerFilter(django_filters.FilterSet):
+    # age = django_filters.IntegerFilter(name="age", lookup_type="icontains")
+    gender = django_filters.CharFilter(name="gender", lookup_type="icontains")
+    # notes = django_filters.CharFilter(name="notes", lookup_type="icontains")
+
+    class Meta:
+        model = Bookmarker
+        fields = [ 'gender',]
 
 # view sets
 
 # @require_http_methods(["GET", "PUT", "DELETE", "POST"])
 class BookmarkViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ser.BookmarkSerializer
     # permission_classes = (permissions.IsAuthenticated,
     #                       IsOwnerOrReadOnly)
-    # filter_backends = (filters.DjangoFilterBackend,)
-    # filter_class = BookmarkerFilter
     queryset = Bookmark.objects.all()
 
     # def perform_create(self, serializer):
@@ -53,17 +54,21 @@ class BookmarkViewSet(viewsets.ModelViewSet):
         return 20
 
 class ClickViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Click.objects.all()
     serializer_class = ser.ClickSerializer
 
 class BookmarkerViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Bookmarker.objects.all()
     serializer_class = ser.BookmarkerSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = BookmarkerFilter
 
 # lower level in API
 
 class BookmarkerBookmarkList(generics.ListCreateAPIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ser.BookmarkSerializer
 
     def initial(self, request, *args, **kwargs):

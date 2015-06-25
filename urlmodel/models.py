@@ -42,7 +42,7 @@ class Tag(models.Model):
 class Bookmark(models.Model):
     URL = models.URLField(max_length=300)
     code = models.CharField(max_length=10, unique=True)
-    posted_at = models.DateTimeField(blank=True)
+    posted_at = models.DateTimeField(blank=True, auto_now=True)
     title = models.CharField(max_length=255, blank=True)
     description = models.CharField(max_length=255, blank=True)
     user = models.ForeignKey(User)
@@ -91,7 +91,7 @@ class Bookmarker(models.Model):
 class Click(models.Model):
     bookmark = models.ForeignKey(Bookmark)
     user = models.ForeignKey(User, null=True)
-    clicked_at = models.DateTimeField(null=True)
+    clicked_at = models.DateTimeField(null=True, auto_now=True)
 
     def set_time(self):
         timezone.activate(settings.TIME_ZONE)
